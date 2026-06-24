@@ -3,16 +3,18 @@ import { useCallback, useEffect, useState } from "react";
 import type { PropsWithChildren } from "react";
 import { getCars, type GetCarsParams } from "../data/car";
 import type { Car } from "../models/car";
-import { CarListContext } from "./CarListContext";
+import { CarListContext, type CarListContextType } from "./CarListContext";
 import { useFilters } from "../hooks/useFilters";
 
 
 export function CarListProvider({ children }: PropsWithChildren) {
 
     const [carsList, setCarsList] = useState<Car[]>([])
+    const [totalPages, setTotalPages] = useState<number>(0)
+    const [total, setTotal] = useState<number>(0)
 
     const { filters, page, limit } = useFilters()
-    
+
     const [isError, setIsError] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
 
@@ -22,13 +24,17 @@ export function CarListProvider({ children }: PropsWithChildren) {
         try {
 
             const params: GetCarsParams = {
-                filters: filters,
+                // filters: filters,
                 page: page,
                 limit: limit
             }
 
-            const result = await getCars(params)
-            setCarsList(result.items)
+            const { items, total, totalPages } = await getCars(params)
+
+            setCarsList(items)
+            setTotalPages(totalPages)
+            setTotal(total)
+
         } catch {
             setIsError(true)
         } finally {
@@ -38,12 +44,14 @@ export function CarListProvider({ children }: PropsWithChildren) {
 
     useEffect(() => {
         getCarList()
-    }, [])
+    }, [filters, page, limit])
 
-    const context = {
+    const context: CarListContextType = {
         carsList,
         isError,
-        isLoading
+        isLoading,
+        totalPages,
+        total
     }
 
     return (

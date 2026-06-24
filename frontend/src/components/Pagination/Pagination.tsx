@@ -1,16 +1,21 @@
+import { useFilters } from '../../hooks/useFilters'
+import { useCarsList } from '../../hooks/useCarsList'
 import './Pagination.css'
 
 export function Pagination() {
 
-    const pages = [1, 2, 3, 4, 5]
+    const { page, setPage } = useFilters()
+    const { totalPages } = useCarsList()
+
+    const pages = Array.from({ length: totalPages }, (_, i) => i + 1)
 
     return (
         <div className="Pagination">
-            {/* <button
+            <button
                 type="button"
                 className="Pagination__button"
-                onClick={() => {}}
-                disabled={true}
+                onClick={() => setPage(page - 1)}
+                disabled={page === 1}
             >
                 Prev
             </button>
@@ -19,8 +24,8 @@ export function Pagination() {
                 <button
                     key={p}
                     type="button"
-                    className={`Pagination__button${p === 1 ? ' Pagination__button--active' : ''}`}
-                    onClick={() => {}}
+                    className={`Pagination__button${p === page ? ' Pagination__button--active' : ''}`}
+                    onClick={() => setPage(p)}
                 >
                     {p}
                 </button>
@@ -29,11 +34,11 @@ export function Pagination() {
             <button
                 type="button"
                 className="Pagination__button"
-                onClick={() => {}}
-                disabled={true}
+                onClick={() => setPage(page + 1)}
+                disabled={page === totalPages}
             >
                 Next
-            </button> */}
+            </button>
         </div>
     )
 }
