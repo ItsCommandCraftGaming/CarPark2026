@@ -14,19 +14,23 @@
 .Pagination__button {
     min-width: 40px;
     padding: 8px 12px;
-    border: 1px solid #d0d5dd;
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 8px;
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     color: #1f2937;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    transition: all 0.3s ease;
 }
 
 .Pagination__button:hover:not(:disabled) {
-    background: #f3f4f6;
-    border-color: #9ca3af;
+    background: #ffffff;
+    border-color: #ffffff;
+    color: #2563eb;
+    backdrop-filter: none;
 }
 
 .Pagination__button:disabled {
@@ -35,12 +39,16 @@
 }
 
 .Pagination__button--active {
-    background: #2563eb;
-    border-color: #2563eb;
+    background: rgba(37, 99, 235, 0.4);
+    border-color: rgba(37, 99, 235, 0.6);
     color: #ffffff;
+    backdrop-filter: blur(10px);
 }
 
 .Pagination__button--active:hover:not(:disabled) {
-    background: #1d4ed8;
-    border-color: #1d4ed8;
+    background: #ffffff;
+    border-color: #ffffff;
+    color: #2563eb;
+    backdrop-filter: none;
 }
+

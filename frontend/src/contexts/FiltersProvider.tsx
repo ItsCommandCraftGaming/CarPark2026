@@ -1,11 +1,17 @@
 
 import { useState } from "react";
 import type { PropsWithChildren } from "react";
-import type { Filters, FiltersContextType } from "./FiltersContext";
+import type { Filters, FiltersContextType, SortOrder } from "./FiltersContext";
 import { FiltersContext } from "./FiltersContext";
+import type { Car } from "../models/car";
 
 const defaultFilters: Filters = {
     manufacturer: "",
+    search: "",
+    constructionYearFrom: "",
+    constructionYearTo: "",
+    priceFrom: "",
+    priceTo: "",
 }
 
 export function FiltersProvider({ children }: PropsWithChildren) {
@@ -13,12 +19,24 @@ export function FiltersProvider({ children }: PropsWithChildren) {
 
     const [page, setPage] = useState<number>(1)
     const [limit, setLimit] = useState<number>(25)
+    const [sort, setSort] = useState<keyof Car | "">("")
+    const [order, setOrder] = useState<SortOrder>("asc")
 
     const updateFilter = (field: keyof Filters, value: string) => {
         setFilters(prev => ({ ...prev, [field]: value }))
+        setPage(1)
     }
 
-    const resetFilters = () => setFilters(defaultFilters)
+    const resetFilters = () => {
+        setFilters(defaultFilters)
+        setPage(1)
+        setSort("")
+        setOrder("asc")
+    }
+
+    const [showFavoritesOnly, setShowFavoritesOnly] = useState<boolean>(false)
+
+    const handleFavoritesToggle = (checked: boolean) => setShowFavoritesOnly(checked)
 
     const context: FiltersContextType = {
         filters,
@@ -29,12 +47,12 @@ export function FiltersProvider({ children }: PropsWithChildren) {
         setPage,
         limit,
         setLimit,
-        // sort,
-        // setSort,
-        // order,
-        // setOrder,
-        showFavoritesOnly: false,
-        handleFavoritesToggle: () => { }
+        sort,
+        setSort,
+        order,
+        setOrder,
+        showFavoritesOnly,
+        handleFavoritesToggle
     }
 
     return (

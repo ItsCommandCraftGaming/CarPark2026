@@ -1,9 +1,11 @@
 .Content {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 1.5rem;
 }
 
 .CarList {
-
+    display: flex;
+    flex-direction: column;
+    gap: 0;
 }

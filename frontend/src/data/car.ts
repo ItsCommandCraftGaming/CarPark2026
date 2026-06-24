@@ -10,7 +10,10 @@ export type GetCarsParams = {
     order?: SortOrder
     page?: number
     limit?: number
-    filters?: Partial<Record<keyof Car, string>>
+    // filters can include string matches or range fields like 'constructionYearFrom', 'priceTo', etc.
+    filters?: Record<string, string>
+    showFavoritesOnly?: boolean
+    favorites?: string[]
 }
 
 export type Paginated<T> = {
@@ -28,14 +31,56 @@ export type Paginated<T> = {
  * @returns A page of cars plus pagination metadata
  */
 export async function getCars(params: GetCarsParams = {}): Promise<Paginated<Car>> {
-    const { sort, order = 'asc', page, limit, filters = {} } = params
+    const { sort, order = 'asc', page = 1, limit = 25, filters = {}, showFavoritesOnly = false, favorites = [] } = params
 
     const query = new URLSearchParams()
 
     for (const [key, value] of Object.entries(filters)) {
-        if (value !== undefined && value !== '') {
-            query.set(`${key}_like`, value)
+        if (value === undefined || value === '') continue
+
+        // Multi-field search: `search` applies `_like` to several text fields
+        if (key === 'search') {
+            const words = value.toLowerCase().trim().split(/\s+/)
+            const otherWords: string[] = []
+            
+            words.forEach(word => {
+                if (word === 'electric') {
+                    query.set('fuelType_like', 'Electric')
+                } else if (word === 'diesel') {
+                    query.set('fuelType_like', 'Diesel')
+                } else if (word === 'petrol') {
+                    query.set('fuelType_like', 'Petrol')
+                } else if (word === 'manual') {
+                    query.set('gearbox_like', 'Manual')
+                } else if (word === 'automatic') {
+                    query.set('gearbox_like', 'Automatic')
+                } else {
+                    otherWords.push(word)
+                }
+            })
+            
+            if (otherWords.length > 0) {
+                // Use json-server full-text search `q` for other query words
+                query.set('q', otherWords.join(' '))
+            }
+            continue
         }
+
+        // Support range queries: keys ending with From/To -> _gte/_lte
+        if (key.endsWith('From')) {
+            const field = key.replace(/From$/, '')
+            query.set(`${field}_gte`, value)
+            continue
+        }
+
+        if (key.endsWith('To')) {
+            const field = key.replace(/To$/, '')
+            query.set(`${field}_lte`, value)
+            continue
+        }
+
+        // Default: partial match
+        query.set(`${key}_like`, value)
     }
 
     if (sort) {
@@ -43,24 +88,36 @@ export async function getCars(params: GetCarsParams = {}): Promise<Paginated<Car
         query.set('_order', order)
     }
     
-    if (page !== undefined) {
-        query.set('_page', String(page))
-    }
-
-    if (limit !== undefined) {
-        query.set('_limit', String(limit))
-    }
-
     const res = await fetch(`${API_BASE_URL}/cars?${query.toString()}`)
     if (!res.ok) {
         throw new Error(`Request failed: ${res.status} ${res.statusText}`)
     }
 
     const items = (await res.json()) as Car[]
-    const total = Number(res.headers.get('X-Total-Count') ?? items.length)
-    const totalPages = limit > 0 ? Math.max(1, Math.ceil(total / limit)) : 1
 
-    return { items, total, page, limit, totalPages }
+    let filteredItems = items
+    if (showFavoritesOnly) {
+        filteredItems = filteredItems.filter(car => favorites.includes(car.vin))
+    }
+
+    const searchVal = filters.search
+    if (searchVal) {
+        const term = searchVal.toLowerCase().trim()
+        filteredItems = filteredItems.filter(car => {
+            return car.manufacturer.toLowerCase().includes(term) ||
+                   car.model.toLowerCase().includes(term) ||
+                   (car.fuelType && car.fuelType.toLowerCase().includes(term)) ||
+                   (car.gearbox && car.gearbox.toLowerCase().includes(term))
+        })
+    }
+
+    const total = filteredItems.length
+    const totalPages = limit > 0 ? Math.max(1, Math.ceil(total / limit)) : 1
+    
+    const startIndex = (page - 1) * limit
+    const paginatedItems = filteredItems.slice(startIndex, startIndex + limit)
+
+    return { items: paginatedItems, total, page, limit, totalPages }
 }
 
 /**

@@ -2,6 +2,7 @@ import type { Car } from "../../models/car"
 import "./CarItem.css"
 import { useFavorites } from "../../hooks/useFavorites"
 import { IMG_BASE_URL } from "../../data/constants"
+import { useBasket } from "../../hooks/useBasket"
 
 type Props = {
     car: Car
@@ -10,6 +11,8 @@ type Props = {
 export function CarItem({ car }: Props) {
     const equipments = car.equipment.split(",")
     const { toggleFavorite, isFavorite } = useFavorites()
+    const { addToBasket, removeFromBasket, isItemInBasket } = useBasket()
+    const inBasket = isItemInBasket(car.vin)
 
     return (
         <div className="carItem">
@@ -43,6 +46,15 @@ export function CarItem({ car }: Props) {
                 <button className="button" onClick={() => toggleFavorite(car)}>
                     {isFavorite(car) ? "Remove from favorites" : "Add to favorites"}
                 </button>
+                {inBasket ? (
+                    <button className="button button--basket-remove" onClick={() => removeFromBasket(car.vin)}>
+                        Remove from basket
+                    </button>
+                ) : (
+                    <button className="button button--basket-add" onClick={() => addToBasket(car)}>
+                        Add to basket
+                    </button>
+                )}
             </div>
         </div>
     )

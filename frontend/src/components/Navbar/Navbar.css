@@ -1,0 +1,114 @@
+.Navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    margin: 0 auto 1.5rem auto;
+    width: 90%;
+    max-width: 1000px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.Navbar__brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.Navbar__brand:hover {
+    transform: scale(1.02);
+}
+
+.Navbar__logo {
+    font-size: 1.8rem;
+}
+
+.Navbar__title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-800) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.02em;
+}
+
+.Navbar__links {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.Navbar__link {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    background: transparent;
+    color: var(--gray-700);
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+}
+
+.Navbar__link:hover {
+    background: rgba(37, 99, 235, 0.08);
+    color: var(--primary-600);
+}
+
+.Navbar__link--active {
+    background: var(--primary-600);
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.Navbar__link--basket {
+    padding-right: 2.2rem;
+}
+
+.Navbar__badge {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--danger-500);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+    animation: badge-pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes badge-pop {
+    0% {
+        transform: translateY(-50%) scale(0.5);
+    }
+    100% {
+        transform: translateY(-50%) scale(1);
+    }
+}
+
+@media (max-width: 600px) {
+    .Navbar {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+}
