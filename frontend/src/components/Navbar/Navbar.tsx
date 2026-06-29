@@ -13,7 +13,7 @@ export function Navbar({ currentTab, setCurrentTab }: Props) {
         <nav className="Navbar">
             <div className="Navbar__brand" onClick={() => setCurrentTab('catalog')}>
                 <span className="Navbar__logo">🚗</span>
-                <span className="Navbar__title">Topmotive Car Park</span>
+                <span className="Navbar__title">Mihai's Garage</span>
             </div>
             <div className="Navbar__links">
                 <button
