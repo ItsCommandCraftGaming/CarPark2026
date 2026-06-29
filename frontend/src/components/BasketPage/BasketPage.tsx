@@ -1,6 +1,13 @@
 import { useBasket } from "../../hooks/useBasket"
 import { IMG_BASE_URL } from "../../data/constants"
 import { useState } from "react"
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
+import SpeedIcon from '@mui/icons-material/Speed'
+import SettingsIcon from '@mui/icons-material/Settings'
+import LocalGasStationIcon from '@mui/icons-material/LocalGasStation'
+import CloseIcon from '@mui/icons-material/Close'
 import "./BasketPage.css"
 
 type Props = {
@@ -36,7 +43,7 @@ export function BasketPage({ setCurrentTab }: Props) {
         return (
             <div className="BasketPage BasketPage--empty">
                 <div className="empty-state">
-                    <span className="empty-state__icon">🛒</span>
+                    <span className="empty-state__icon"><ShoppingCartIcon sx={{ fontSize: 64 }} /></span>
                     <h2>Your Basket is Empty</h2>
                     <p>You haven't added any vehicles to your basket yet.</p>
                     <button
@@ -78,7 +85,7 @@ export function BasketPage({ setCurrentTab }: Props) {
         return (
             <div className="BasketPage BasketPage--success">
                 <div className="success-state">
-                    <span className="success-state__icon">✅</span>
+                    <span className="success-state__icon"><CheckCircleIcon sx={{ fontSize: 64, color: 'var(--success-500)' }} /></span>
                     <h2>Order Confirmed!</h2>
                     <p>Thank you for your purchase. We have received your order request.</p>
                     <button
@@ -131,10 +138,10 @@ export function BasketPage({ setCurrentTab }: Props) {
                             <div className="BasketItem__details">
                                 <h3 className="BasketItem__title">{item.manufacturer} {item.model ?? ''}</h3>
                                 <div className="BasketItem__specs">
-                                    <span>📅 {item.constructionYear ?? 'N/A'}</span>
-                                    <span>🛣️ {item.mileage !== undefined && item.mileage !== null ? item.mileage.toLocaleString() : '0'} km</span>
-                                    <span>⚙️ {item.gearbox ?? 'N/A'}</span>
-                                    <span>⛽ {item.fuelType ?? 'N/A'}</span>
+                                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><CalendarTodayIcon fontSize="small" /> {item.constructionYear ?? 'N/A'}</span>
+                                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><SpeedIcon fontSize="small" /> {item.mileage !== undefined && item.mileage !== null ? item.mileage.toLocaleString() : '0'} km</span>
+                                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><SettingsIcon fontSize="small" /> {item.gearbox ?? 'N/A'}</span>
+                                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><LocalGasStationIcon fontSize="small" /> {item.fuelType ?? 'N/A'}</span>
                                 </div>
                                 <div className="BasketItem__price">{item.price !== undefined && item.price !== null ? item.price.toLocaleString() : '0'} EUR</div>
                             </div>
@@ -144,7 +151,7 @@ export function BasketPage({ setCurrentTab }: Props) {
                                 onClick={() => removeFromBasket(item.vin)}
                                 title="Remove item"
                             >
-                                ✕
+                                <CloseIcon />
                             </button>
                         </div>
                     ))}

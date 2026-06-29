@@ -18,7 +18,7 @@ export function FiltersProvider({ children }: PropsWithChildren) {
     const [filters, setFilters] = useState<Filters>(defaultFilters)
 
     const [page, setPage] = useState<number>(1)
-    const [limit, setLimit] = useState<number>(25)
+    const [limit, setLimit] = useState<number>(20)
     const [sort, setSort] = useState<keyof Car | "">("")
     const [order, setOrder] = useState<SortOrder>("asc")
 

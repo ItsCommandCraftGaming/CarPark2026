@@ -1,3 +1,4 @@
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar'
 import { useBasket } from "../../hooks/useBasket"
 import "./Navbar.css"
 
@@ -12,7 +13,7 @@ export function Navbar({ currentTab, setCurrentTab }: Props) {
     return (
         <nav className="Navbar">
             <div className="Navbar__brand" onClick={() => setCurrentTab('catalog')}>
-                <span className="Navbar__logo">🚗</span>
+                <span className="Navbar__logo"><DirectionsCarIcon fontSize="large" /></span>
                 <span className="Navbar__title">Mihai's Garage</span>
             </div>
             <div className="Navbar__links">
