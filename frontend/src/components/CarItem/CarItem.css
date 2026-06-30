@@ -30,7 +30,7 @@
 
 .carItem:hover {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-    transform: translateY(-4px);
+    /* transform: translateY(-4px); */
     border-color: rgba(37, 99, 235, 0.5);
     background: rgba(255, 255, 255, 0.25);
     backdrop-filter: blur(15px);
@@ -170,5 +170,143 @@
     
     .price {
         align-self: flex-start;
+    }
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 2rem;
+    color: #666;
+    background: none;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.modal-close:hover {
+    color: #ef4444;
+}
+
+.modal-title {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: #111;
+    font-size: 1.8rem;
+    text-align: center;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+}
+
+.modal-image-container {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.modal-car-image {
+    width: 100%;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.modal-info {
+    flex: 1.2;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.modal-info .row {
+    font-size: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #f0f0f0;
+    margin-bottom: 0;
+}
+
+.modal-info .label {
+    min-width: 160px;
+    color: #444;
+    font-weight: 600;
+}
+
+.price-tag {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #10b981;
+}
+
+.full-list {
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 1rem;
+    margin-bottom: 0;
+}
+
+.button--quick-view {
+    background: #3b82f6;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.button--quick-view:hover {
+    background: #2563eb;
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+@media (max-width: 768px) {
+    .modal-body {
+        flex-direction: column;
+    }
+    
+    .modal-content {
+        padding: 1.5rem;
     }
 }
