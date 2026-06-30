@@ -1,4 +1,7 @@
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar'
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import ViewListIcon from '@mui/icons-material/ViewList'
 import { useBasket } from "../../hooks/useBasket"
 import { useFavorites } from "../../hooks/useFavorites"
 import "./Navbar.css"
@@ -24,14 +27,14 @@ export function Navbar({ currentTab, setCurrentTab }: Props) {
                     className={`Navbar__link${currentTab === 'catalog' ? ' Navbar__link--active' : ''}`}
                     onClick={() => setCurrentTab('catalog')}
                 >
-                    Cars Catalog
+                    <ViewListIcon fontSize="small" /> Cars Catalog
                 </button>
                 <button
                     type="button"
                     className={`Navbar__link Navbar__link--basket${currentTab === 'favorites' ? ' Navbar__link--active' : ''}`}
                     onClick={() => setCurrentTab('favorites')}
                 >
-                    Favorites
+                    <FavoriteIcon fontSize="small" /> Favorites
                     {favorites.length > 0 && (
                         <span className="Navbar__badge" style={{ backgroundColor: 'var(--warning-500)' }}>{favorites.length}</span>
                     )}
@@ -41,7 +44,7 @@ export function Navbar({ currentTab, setCurrentTab }: Props) {
                     className={`Navbar__link Navbar__link--basket${currentTab === 'basket' ? ' Navbar__link--active' : ''}`}
                     onClick={() => setCurrentTab('basket')}
                 >
-                    Shopping Basket
+                    <ShoppingCartIcon fontSize="small" /> Shopping Basket
                     {basketItems.length > 0 && (
                         <span className="Navbar__badge">{basketItems.length}</span>
                     )}

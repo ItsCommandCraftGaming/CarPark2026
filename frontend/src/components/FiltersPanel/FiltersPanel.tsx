@@ -1,17 +1,36 @@
+import { useState, useEffect } from "react"
 import { useFilters } from "../../hooks/useFilters"
 import "./FiltersPanel.css"
 
 export function FiltersPanel() {
     const { filters, updateFilter } = useFilters()
+    const [searchTerm, setSearchTerm] = useState(filters.search ?? "")
 
+    useEffect(() => {
+        if (!filters.search) {
+            setSearchTerm("")
+        }
+    }, [filters.search])
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (searchTerm.length >= 3 || searchTerm.length === 0) {
+                if (searchTerm !== (filters.search ?? "")) {
+                    updateFilter("search", searchTerm)
+                }
+            }
+        }, 500)
+
+        return () => clearTimeout(timer)
+    }, [searchTerm, updateFilter, filters.search])
     return (
         <div className="filtersPanel">
             <h3>Filters Cars</h3>
             <input
                 type="text"
                 placeholder="Search by manufacturer, model, etc."
-                value={filters.search ?? ""}
-                onChange={(e) => updateFilter("search", e.target.value)}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
             />
             <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                 <input

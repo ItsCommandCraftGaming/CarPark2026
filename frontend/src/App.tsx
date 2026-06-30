@@ -22,7 +22,7 @@ export function App() {
                         </CarListProvider>
                     ) : currentTab === 'favorites' ? (
                         <CarListProvider forceFavoritesOnly={true}>
-                            <Content />
+                            <Content isFavoritesTab={true} onGoToCatalog={() => setCurrentTab('catalog')} />
                         </CarListProvider>
                     ) : (
                         <BasketPage setCurrentTab={setCurrentTab} />
