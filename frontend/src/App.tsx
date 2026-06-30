@@ -7,9 +7,10 @@ import { BasketProvider } from './contexts/BasketProvider'
 import { FavoritesProvider } from './contexts/FavoritesProvider'
 import { Navbar } from './components/Navbar/Navbar'
 import { BasketPage } from './components/BasketPage/BasketPage'
+import { AdminPage } from './components/AdminPage/AdminPage'
 
 export function App() {
-    const [currentTab, setCurrentTab] = useState<'catalog' | 'basket' | 'favorites'>('catalog')
+    const [currentTab, setCurrentTab] = useState<'catalog' | 'basket' | 'favorites' | 'admin'>('catalog')
 
     return (
         <FiltersProvider>
@@ -24,6 +25,8 @@ export function App() {
                         <CarListProvider forceFavoritesOnly={true}>
                             <Content isFavoritesTab={true} onGoToCatalog={() => setCurrentTab('catalog')} />
                         </CarListProvider>
+                    ) : currentTab === 'admin' ? (
+                        <AdminPage />
                     ) : (
                         <BasketPage setCurrentTab={setCurrentTab} />
                     )}
@@ -32,4 +35,3 @@ export function App() {
         </FiltersProvider>
     )
 }
-

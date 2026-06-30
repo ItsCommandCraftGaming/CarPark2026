@@ -2,13 +2,14 @@ import DirectionsCarIcon from '@mui/icons-material/DirectionsCar'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import ViewListIcon from '@mui/icons-material/ViewList'
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
 import { useBasket } from "../../hooks/useBasket"
 import { useFavorites } from "../../hooks/useFavorites"
 import "./Navbar.css"
 
 type Props = {
-    currentTab: 'catalog' | 'basket' | 'favorites'
-    setCurrentTab: (tab: 'catalog' | 'basket' | 'favorites') => void
+    currentTab: 'catalog' | 'basket' | 'favorites' | 'admin'
+    setCurrentTab: (tab: 'catalog' | 'basket' | 'favorites' | 'admin') => void
 }
 
 export function Navbar({ currentTab, setCurrentTab }: Props) {
@@ -48,6 +49,13 @@ export function Navbar({ currentTab, setCurrentTab }: Props) {
                     {basketItems.length > 0 && (
                         <span className="Navbar__badge">{basketItems.length}</span>
                     )}
+                </button>
+                <button
+                    type="button"
+                    className={`Navbar__link${currentTab === 'admin' ? ' Navbar__link--active' : ''}`}
+                    onClick={() => setCurrentTab('admin')}
+                >
+                    <AdminPanelSettingsIcon fontSize="small" /> Admin
                 </button>
             </div>
         </nav>
