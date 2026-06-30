@@ -8,7 +8,11 @@ import { useFilters } from "../hooks/useFilters";
 import { useFavorites } from "../hooks/useFavorites";
 
 
-export function CarListProvider({ children }: PropsWithChildren) {
+type CarListProviderProps = PropsWithChildren<{
+    forceFavoritesOnly?: boolean
+}>
+
+export function CarListProvider({ children, forceFavoritesOnly }: CarListProviderProps) {
 
     const [carsList, setCarsList] = useState<Car[]>([])
     const [totalPages, setTotalPages] = useState<number>(0)
@@ -39,7 +43,7 @@ export function CarListProvider({ children }: PropsWithChildren) {
                 limit: limit,
                 sort: sort || undefined,
                 order: order,
-                showFavoritesOnly,
+                showFavoritesOnly: forceFavoritesOnly !== undefined ? forceFavoritesOnly : showFavoritesOnly,
                 favorites
             }
 
@@ -58,7 +62,7 @@ export function CarListProvider({ children }: PropsWithChildren) {
 
     useEffect(() => {
         getCarList()
-    }, [filters, page, limit, sort, order, showFavoritesOnly, favorites])
+    }, [filters, page, limit, sort, order, showFavoritesOnly, favorites, forceFavoritesOnly])
 
     const context: CarListContextType = {
         carsList,

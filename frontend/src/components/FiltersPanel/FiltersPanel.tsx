@@ -2,7 +2,7 @@ import { useFilters } from "../../hooks/useFilters"
 import "./FiltersPanel.css"
 
 export function FiltersPanel() {
-    const { filters, updateFilter, showFavoritesOnly, handleFavoritesToggle } = useFilters()
+    const { filters, updateFilter } = useFilters()
 
     return (
         <div className="filtersPanel">
@@ -46,14 +46,6 @@ export function FiltersPanel() {
                     style={{ width: '140px' }}
                 />
             </div>
-            <label className="checkbox">
-                <input
-                    type="checkbox"
-                    checked={showFavoritesOnly}
-                    onChange={(e) => handleFavoritesToggle(e.target.checked)}
-                />
-                Show only favorites
-            </label>
         </div>
     )
 }

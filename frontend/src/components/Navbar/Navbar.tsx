@@ -1,14 +1,16 @@
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar'
 import { useBasket } from "../../hooks/useBasket"
+import { useFavorites } from "../../hooks/useFavorites"
 import "./Navbar.css"
 
 type Props = {
-    currentTab: 'catalog' | 'basket'
-    setCurrentTab: (tab: 'catalog' | 'basket') => void
+    currentTab: 'catalog' | 'basket' | 'favorites'
+    setCurrentTab: (tab: 'catalog' | 'basket' | 'favorites') => void
 }
 
 export function Navbar({ currentTab, setCurrentTab }: Props) {
     const { basketItems } = useBasket()
+    const { favorites } = useFavorites()
 
     return (
         <nav className="Navbar">
@@ -23,6 +25,16 @@ export function Navbar({ currentTab, setCurrentTab }: Props) {
                     onClick={() => setCurrentTab('catalog')}
                 >
                     Cars Catalog
+                </button>
+                <button
+                    type="button"
+                    className={`Navbar__link Navbar__link--basket${currentTab === 'favorites' ? ' Navbar__link--active' : ''}`}
+                    onClick={() => setCurrentTab('favorites')}
+                >
+                    Favorites
+                    {favorites.length > 0 && (
+                        <span className="Navbar__badge" style={{ backgroundColor: 'var(--warning-500)' }}>{favorites.length}</span>
+                    )}
                 </button>
                 <button
                     type="button"

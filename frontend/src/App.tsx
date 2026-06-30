@@ -9,7 +9,7 @@ import { Navbar } from './components/Navbar/Navbar'
 import { BasketPage } from './components/BasketPage/BasketPage'
 
 export function App() {
-    const [currentTab, setCurrentTab] = useState<'catalog' | 'basket'>('catalog')
+    const [currentTab, setCurrentTab] = useState<'catalog' | 'basket' | 'favorites'>('catalog')
 
     return (
         <FiltersProvider>
@@ -18,6 +18,10 @@ export function App() {
                     <Navbar currentTab={currentTab} setCurrentTab={setCurrentTab} />
                     {currentTab === 'catalog' ? (
                         <CarListProvider>
+                            <Content />
+                        </CarListProvider>
+                    ) : currentTab === 'favorites' ? (
+                        <CarListProvider forceFavoritesOnly={true}>
                             <Content />
                         </CarListProvider>
                     ) : (
