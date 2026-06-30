@@ -4,18 +4,24 @@ import { getCars, deleteCar, createCar, updateCar } from '../../data/car'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
+import { AdminFormModal } from './AdminFormModal'
 import './AdminPage.css'
 
 export function AdminPage() {
+    // Aici ținem minte lista de mașini
     const [cars, setCars] = useState<Car[]>([])
     const [isLoading, setIsLoading] = useState(true)
+    
+    // Stări pentru a controla dacă fereastra modală (formularul) este deschisă
     const [isFormOpen, setIsFormOpen] = useState(false)
+    // Aici ținem datele mașinii pe care o edităm momentan (sau creăm una nouă)
     const [editingCar, setEditingCar] = useState<Partial<Car> | null>(null)
 
+    // Funcție care cere mașinile de la backend
     const fetchCars = async () => {
         setIsLoading(true)
         try {
-            // Fetch a large number to show all in admin
+            // Cerem 1000 de mașini ca să le vedem pe toate în pagina de Admin
             const res = await getCars({ limit: 1000 })
             setCars(res.items)
         } catch (e) {
@@ -25,80 +31,61 @@ export function AdminPage() {
         }
     }
 
+    // Se apelează o singură dată când se încarcă pagina
     useEffect(() => {
         fetchCars()
     }, [])
 
+    // Funcție pentru a șterge o mașină
     const handleDelete = async (vin: string) => {
-        if (!window.confirm("Are you sure you want to delete this car?")) return
+        if (!window.confirm("Ești sigur că vrei să ștergi această mașină?")) return
         try {
-            await deleteCar(vin)
-            setCars(cars.filter(c => c.vin !== vin))
+            await deleteCar(vin) // O ștergem din baza de date (JSON)
+            setCars(cars.filter(c => c.vin !== vin)) // O ștergem și de pe ecran
         } catch (e) {
-            alert("Failed to delete car")
+            alert("Nu s-a putut șterge mașina")
             console.error(e)
         }
     }
 
+    // Deschide formularul complet gol pentru o mașină NOUĂ
     const openAddForm = () => {
         setEditingCar({
-            vin: '',
-            manufacturer: '',
-            model: '',
-            fuelType: '',
-            gearbox: '',
-            price: 0,
-            constructionYear: 2024,
-            mileage: 0,
-            engineSize: 0,
-            power: 0,
-            image: '',
-            equipment: ''
+            vin: '', manufacturer: '', model: '', fuelType: 'Petrol', gearbox: 'Manual',
+            price: 0, constructionYear: 2024, mileage: 0, engineSize: 0, power: 0, image: '', equipment: ''
         })
         setIsFormOpen(true)
     }
 
+    // Deschide formularul pre-completat cu datele unei mașini EXISTENTE
     const openEditForm = (car: Car) => {
         setEditingCar(car)
         setIsFormOpen(true)
     }
 
-    const handleFormSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        if (!editingCar) return
-
+    // Funcție care primește datele din <AdminFormModal /> și le salvează pe server
+    const handleSaveCar = async (carToSave: Partial<Car>) => {
         try {
-            if (cars.some(c => c.vin === editingCar.vin) && editingCar.vin !== (editingCar as any)._originalVin) {
-                // Simplistic check: If editing an existing car, it uses updateCar.
-                // If it's a new car, we use createCar.
-                // Actually let's check if the car exists in the list to decide create vs update
-                const exists = cars.find(c => c.vin === editingCar.vin)
-                if (exists && !editingCar.hasOwnProperty('_isNew')) {
-                    const updated = await updateCar(editingCar)
-                    setCars(cars.map(c => c.vin === updated.vin ? updated : c))
-                } else {
-                    const created = await createCar(editingCar as Car)
-                    setCars([created, ...cars])
-                }
+            // Verificăm dacă mașina există deja în lista noastră
+            const exists = cars.find(c => c.vin === carToSave.vin)
+            
+            if (exists) {
+                // Dacă există, o ACTUALIZĂM (PATCH)
+                const updated = await updateCar(carToSave)
+                setCars(cars.map(c => c.vin === updated.vin ? updated : c))
             } else {
-                const created = await createCar(editingCar as Car)
-                setCars([created, ...cars])
+                // Dacă nu există, o CREĂM (POST)
+                const created = await createCar(carToSave as Car)
+                setCars([created, ...cars]) // O adăugăm la începutul listei pe ecran
             }
+            
+            // Închidem fereastra după salvare
             setIsFormOpen(false)
             setEditingCar(null)
-            fetchCars() // Refresh list just to be safe
         } catch (error) {
-            alert("Failed to save car. Check console for details.")
+            alert("A apărut o eroare la salvare. Verifică în consolă.")
             console.error(error)
         }
-    }
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value, type } = e.target as any
-        setEditingCar(prev => prev ? {
-            ...prev,
-            [name]: type === 'number' ? Number(value) : value
-        } : null)
     }
 
     return (
@@ -155,79 +142,14 @@ export function AdminPage() {
                 </div>
             )}
 
+            {/* 3. Dacă butonul a fost apăsat, afișăm Componenta de Formular Modal */}
             {isFormOpen && editingCar && (
-                <div className="modal-overlay" onClick={() => setIsFormOpen(false)}>
-                    <div className="modal-content admin-form" onClick={(e) => e.stopPropagation()}>
-                        <button className="modal-close" onClick={() => setIsFormOpen(false)}>&times;</button>
-                        <h2 className="modal-title">{cars.some(c => c.vin === editingCar.vin) ? 'Edit Car' : 'Add New Car'}</h2>
-                        
-                        <form onSubmit={handleFormSubmit}>
-                            <div className="form-grid">
-                                <div className="form-group">
-                                    <label>VIN</label>
-                                    <input required type="text" name="vin" value={editingCar.vin} onChange={handleInputChange} disabled={cars.some(c => c.vin === editingCar.vin)} />
-                                </div>
-                                <div className="form-group">
-                                    <label>Manufacturer</label>
-                                    <input required type="text" name="manufacturer" value={editingCar.manufacturer} onChange={handleInputChange} />
-                                </div>
-                                <div className="form-group">
-                                    <label>Model</label>
-                                    <input required type="text" name="model" value={editingCar.model} onChange={handleInputChange} />
-                                </div>
-                                <div className="form-group">
-                                    <label>Fuel Type</label>
-                                    <select name="fuelType" value={editingCar.fuelType} onChange={handleInputChange}>
-                                        <option value="Petrol">Petrol</option>
-                                        <option value="Diesel">Diesel</option>
-                                        <option value="Electric">Electric</option>
-                                        <option value="Hybrid">Hybrid</option>
-                                    </select>
-                                </div>
-                                <div className="form-group">
-                                    <label>Gearbox</label>
-                                    <select name="gearbox" value={editingCar.gearbox} onChange={handleInputChange}>
-                                        <option value="Manual">Manual</option>
-                                        <option value="Automatic">Automatic</option>
-                                    </select>
-                                </div>
-                                <div className="form-group">
-                                    <label>Year</label>
-                                    <input required type="number" name="constructionYear" value={editingCar.constructionYear} onChange={handleInputChange} />
-                                </div>
-                                <div className="form-group">
-                                    <label>Price (EUR)</label>
-                                    <input required type="number" name="price" value={editingCar.price} onChange={handleInputChange} />
-                                </div>
-                                <div className="form-group">
-                                    <label>Mileage</label>
-                                    <input required type="number" name="mileage" value={editingCar.mileage} onChange={handleInputChange} />
-                                </div>
-                                <div className="form-group">
-                                    <label>Engine Size (cm3)</label>
-                                    <input required type="number" name="engineSize" value={editingCar.engineSize} onChange={handleInputChange} />
-                                </div>
-                                <div className="form-group">
-                                    <label>Power (CP)</label>
-                                    <input required type="number" name="power" value={editingCar.power} onChange={handleInputChange} />
-                                </div>
-                                <div className="form-group">
-                                    <label>Image Name</label>
-                                    <input type="text" name="image" value={editingCar.image} onChange={handleInputChange} placeholder="e.g. car1.jpg" />
-                                </div>
-                                <div className="form-group full-width">
-                                    <label>Equipment (comma separated)</label>
-                                    <input type="text" name="equipment" value={editingCar.equipment} onChange={handleInputChange} />
-                                </div>
-                            </div>
-                            
-                            <div className="form-actions">
-                                <button type="button" className="button button-cancel" onClick={() => setIsFormOpen(false)}>Cancel</button>
-                                <button type="submit" className="button button-save">Save Car</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                <AdminFormModal 
+                    carToEdit={editingCar}
+                    isExistingCar={cars.some(c => c.vin === editingCar.vin)}
+                    onSave={handleSaveCar}
+                    onClose={() => setIsFormOpen(false)}
+                />
             )}
         </div>
     )
