@@ -5,6 +5,7 @@ import { IMG_BASE_URL } from "../../data/constants"
 import { useBasket } from "../../hooks/useBasket"
 import { useState } from "react"
 import { createPortal } from "react-dom"
+import ZoomInIcon from '@mui/icons-material/ZoomIn'
 type Props = {
     car: Car
 }
@@ -18,8 +19,11 @@ export function CarItem({ car }: Props) {
 
     return (
         <div className="carItem">
-            <div className="imageContainer">
+            <div className="imageContainer" onClick={() => setIsModalOpen(true)} title="Click to open Quick View">
                 <img src={`${IMG_BASE_URL}/${car.image}`} className="carImage" />
+                <div className="zoomOverlay">
+                    <ZoomInIcon fontSize="large" />
+                </div>
             </div>
             <div className="details">
                 <div className="row"><div className="label">Manufacturer: </div> {car.manufacturer}</div>
@@ -29,9 +33,6 @@ export function CarItem({ car }: Props) {
             </div>
             <div className="price">Price: {car.price} EUR</div>
             <div className="row">
-                <button className="button button--quick-view" onClick={() => setIsModalOpen(true)}>
-                    Quick View
-                </button>
                 <button className="button" onClick={() => toggleFavorite(car)}>
                     {isFavorite(car) ? "Remove from favorites" : "Add to favorites"}
                 </button>

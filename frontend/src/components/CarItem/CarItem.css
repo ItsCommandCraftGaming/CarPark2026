@@ -47,6 +47,9 @@
     padding: 0.5rem;
     min-height: 180px;
     border: 1px solid rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
 }
 
 .carImage {
@@ -58,8 +61,31 @@
     transition: transform 0.3s ease;
 }
 
-.carImage:hover {
+.imageContainer:hover .carImage {
     transform: scale(1.05);
+}
+
+.zoomOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    margin: 0.5rem; /* to account for the padding of the container */
+}
+
+.imageContainer:hover .zoomOverlay {
+    opacity: 1;
 }
 
 .details {
@@ -289,16 +315,6 @@
     overflow-y: auto;
     padding-right: 1rem;
     margin-bottom: 0;
-}
-
-.button--quick-view {
-    background: #3b82f6;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-}
-
-.button--quick-view:hover {
-    background: #2563eb;
-    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
 }
 
 @media (max-width: 768px) {
