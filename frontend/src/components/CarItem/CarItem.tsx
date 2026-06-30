@@ -6,6 +6,10 @@ import { useBasket } from "../../hooks/useBasket"
 import { useState } from "react"
 import { createPortal } from "react-dom"
 import ZoomInIcon from '@mui/icons-material/ZoomIn'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
+import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart'
 type Props = {
     car: Car
 }
@@ -34,15 +38,19 @@ export function CarItem({ car }: Props) {
             <div className="price">Price: {car.price} EUR</div>
             <div className="row">
                 <button className="button" onClick={() => toggleFavorite(car)}>
-                    {isFavorite(car) ? "Remove from favorites" : "Add to favorites"}
+                    {isFavorite(car) ? (
+                        <><FavoriteIcon fontSize="small" /> Remove from favorites</>
+                    ) : (
+                        <><FavoriteBorderIcon fontSize="small" /> Add to favorites</>
+                    )}
                 </button>
                 {inBasket ? (
                     <button className="button button--basket-remove" onClick={() => removeFromBasket(car.vin)}>
-                        Remove from basket
+                        <RemoveShoppingCartIcon fontSize="small" /> Remove from basket
                     </button>
                 ) : (
                     <button className="button button--basket-add" onClick={() => addToBasket(car)}>
-                        Add to basket
+                        <AddShoppingCartIcon fontSize="small" /> Add to basket
                     </button>
                 )}
             </div>
