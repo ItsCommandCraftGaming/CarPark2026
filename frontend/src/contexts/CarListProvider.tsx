@@ -18,7 +18,7 @@ export function CarListProvider({ children, forceFavoritesOnly }: CarListProvide
     const [totalPages, setTotalPages] = useState<number>(0)
     const [total, setTotal] = useState<number>(0)
 
-    const { filters, page, limit, sort, order, showFavoritesOnly } = useFilters()
+    const { filters, page, limit, sort, order } = useFilters()
     const { favorites } = useFavorites()
 
     const [isError, setIsError] = useState(false)
@@ -43,7 +43,7 @@ export function CarListProvider({ children, forceFavoritesOnly }: CarListProvide
                 limit: limit,
                 sort: sort || undefined,
                 order: order,
-                showFavoritesOnly: forceFavoritesOnly !== undefined ? forceFavoritesOnly : showFavoritesOnly,
+                showFavoritesOnly: forceFavoritesOnly || false,
                 favorites
             }
 
@@ -62,7 +62,7 @@ export function CarListProvider({ children, forceFavoritesOnly }: CarListProvide
 
     useEffect(() => {
         getCarList()
-    }, [filters, page, limit, sort, order, showFavoritesOnly, favorites, forceFavoritesOnly])
+    }, [filters, page, limit, sort, order, favorites, forceFavoritesOnly])
 
     const context: CarListContextType = {
         carsList,
