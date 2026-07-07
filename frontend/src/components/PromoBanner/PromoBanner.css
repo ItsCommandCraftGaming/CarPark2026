@@ -1,0 +1,113 @@
+.promo-banner {
+    color: #ffffff;
+    padding: 1.5rem 2rem;
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 140px;
+    width: 90%;
+    max-width: 1000px;
+    margin: 0 auto 1rem auto;
+    transition: background 0.5s ease-in-out;
+}
+
+.promo-badge {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.promo-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.promo-icon-wrapper {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.promo-text h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.promo-text p {
+    margin: 0;
+    font-size: 0.95rem;
+    opacity: 0.9;
+    line-height: 1.4;
+}
+
+.promo-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.promo-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.2s ease;
+}
+
+.promo-dot.active {
+    background: #ffffff;
+    width: 20px;
+    border-radius: 4px;
+}
+
+@media (max-width: 600px) {
+    .promo-banner {
+        padding: 1.5rem 1.25rem;
+        width: 95%;
+    }
+    
+    .promo-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    
+    .promo-badge {
+        position: static;
+        margin-bottom: 0.5rem;
+        display: inline-block;
+    }
+    
+    .promo-text h3 {
+        font-size: 1.15rem;
+    }
+    
+    .promo-text p {
+        font-size: 0.85rem;
+    }
+}

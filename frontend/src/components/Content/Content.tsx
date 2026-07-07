@@ -5,6 +5,7 @@ import { FiltersPanel } from "../FiltersPanel/FiltersPanel"
 import { SortingPanel } from "../SortingPanel/SortingPanel"
 import { useCarsList } from "../../hooks/useCarsList"
 import { Pagination } from "../Pagination/Pagination"
+import { PromoBanner } from "../PromoBanner/PromoBanner"
 import SearchOffIcon from '@mui/icons-material/SearchOff'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 
@@ -19,6 +20,7 @@ export function Content({ isFavoritesTab, onGoToCatalog }: Props) {
 
     return (
         <div className="Content">
+            {!isFavoritesTab && <PromoBanner />}
             <FiltersPanel />
 
             <SortingPanel viewMode={viewMode} onViewModeChange={setViewMode} />
