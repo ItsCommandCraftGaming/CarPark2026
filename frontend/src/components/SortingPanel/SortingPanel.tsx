@@ -2,6 +2,13 @@ import type { Car } from "../../models/car";
 import './SortingPanel.css'
 import SortIcon from '../../assets/sort.svg?react'
 import { useFilters } from "../../hooks/useFilters"
+import ViewListIcon from '@mui/icons-material/ViewList'
+import ViewModuleIcon from '@mui/icons-material/ViewModule'
+
+type Props = {
+    viewMode?: 'list' | 'grid'
+    onViewModeChange?: (mode: 'list' | 'grid') => void
+}
 
 const SORT_FIELDS: { value: keyof Car | "", label: string }[] = [
     { value: "", label: "Default" },
@@ -15,7 +22,7 @@ const SORT_FIELDS: { value: keyof Car | "", label: string }[] = [
 
 const PAGE_SIZES = [5, 10, 20, 50]
 
-export function SortingPanel() {
+export function SortingPanel({ viewMode = 'list', onViewModeChange }: Props) {
     const { sort, setSort, order, setOrder, limit, setLimit, setPage } = useFilters()
 
     const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -79,6 +86,25 @@ export function SortingPanel() {
                     </select>
                 </div>
             </label>
+
+            <div className="SortingPanel__viewToggle">
+                <button
+                    type="button"
+                    className={`SortingPanel__viewToggleBtn ${viewMode === 'list' ? 'active' : ''}`}
+                    onClick={() => onViewModeChange?.('list')}
+                    title="List View"
+                >
+                    <ViewListIcon />
+                </button>
+                <button
+                    type="button"
+                    className={`SortingPanel__viewToggleBtn ${viewMode === 'grid' ? 'active' : ''}`}
+                    onClick={() => onViewModeChange?.('grid')}
+                    title="Grid View"
+                >
+                    <ViewModuleIcon />
+                </button>
+            </div>
         </div>
     )
 }

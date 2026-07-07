@@ -1,3 +1,4 @@
+import { useState } from "react"
 import "./Content.css"
 import { CarItem } from "../CarItem/CarItem"
 import { FiltersPanel } from "../FiltersPanel/FiltersPanel"
@@ -14,12 +15,13 @@ type Props = {
 
 export function Content({ isFavoritesTab, onGoToCatalog }: Props) {
     const { carsList, isLoading, isError } = useCarsList()
+    const [viewMode, setViewMode] = useState<'list' | 'grid'>('list')
 
     return (
         <div className="Content">
             <FiltersPanel />
 
-            <SortingPanel />
+            <SortingPanel viewMode={viewMode} onViewModeChange={setViewMode} />
 
             {isLoading && <p>Data is loading...</p>}
             {isError && <p>Something went wrong</p>}
@@ -55,9 +57,11 @@ export function Content({ isFavoritesTab, onGoToCatalog }: Props) {
                         <>
                             <Pagination />
 
-                            {carsList.map((car) => (
-                                <CarItem key={car.vin} car={car} />
-                            ))}
+                            <div className={viewMode === 'grid' ? 'CarList__grid' : 'CarList__list'}>
+                                {carsList.map((car) => (
+                                    <CarItem key={car.vin} car={car} />
+                                ))}
+                            </div>
 
                             <Pagination />
                         </>

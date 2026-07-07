@@ -142,3 +142,35 @@
 .SortingPanel__orderIcon--desc {
     transform: rotate(180deg);
 }
+
+/* View mode switcher styles */
+.SortingPanel__viewToggle {
+    margin-left: auto;
+    display: flex;
+    gap: 0.5rem;
+    align-self: flex-end;
+}
+
+.SortingPanel__viewToggleBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #d0d5dd;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #1f2937;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.SortingPanel__viewToggleBtn:hover {
+    background-color: var(--gray-100);
+}
+
+.SortingPanel__viewToggleBtn.active {
+    background-color: var(--primary-600);
+    border-color: var(--primary-600);
+    color: #ffffff !important;
+}
