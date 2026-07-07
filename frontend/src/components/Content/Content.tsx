@@ -23,10 +23,10 @@ export function Content({ isFavoritesTab, onGoToCatalog }: Props) {
 
             <SortingPanel viewMode={viewMode} onViewModeChange={setViewMode} />
 
-            {isLoading && <p>Data is loading...</p>}
+            {isLoading && carsList.length === 0 && <p>Data is loading...</p>}
             {isError && <p>Something went wrong</p>}
 
-            {!isLoading && !isError && (
+            {(carsList.length > 0 || (!isLoading && !isError)) && (
                 <div className="CarList">
                     {carsList.length === 0 ? (
                         <div className="empty-state">
