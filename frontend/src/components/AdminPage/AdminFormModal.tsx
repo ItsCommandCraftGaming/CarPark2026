@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { Car } from '../../models/car'
+import { uploadImage } from '../../data/images'
 import './AdminFormModal.css'
 
 type Props = {
@@ -12,6 +13,36 @@ type Props = {
 export function AdminFormModal({ carToEdit, isExistingCar, onSave, onClose }: Props) {
     // Ținem o copie locală a mașinii pentru a o edita fără a afecta tabelul înainte de salvare
     const [localCar, setLocalCar] = useState<Partial<Car>>(carToEdit)
+    const [isUploading, setIsUploading] = useState(false)
+    const [uploadError, setUploadError] = useState<string | null>(null)
+
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (!file) return
+
+        setIsUploading(true)
+        setUploadError(null)
+
+        try {
+            const uploaded = await uploadImage(file)
+            setLocalCar(prev => ({
+                ...prev,
+                image: uploaded.fileName
+            }))
+        } catch (error: any) {
+            console.error("Failed to upload image:", error)
+            setUploadError("Încărcarea imaginii a eșuat.")
+        } finally {
+            setIsUploading(false)
+        }
+    }
+
+    const handleRemoveImage = () => {
+        setLocalCar(prev => ({
+            ...prev,
+            image: ''
+        }))
+    }
 
     // Funcție care se ocupă de actualizarea valorilor din formular
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -85,8 +116,42 @@ export function AdminFormModal({ carToEdit, isExistingCar, onSave, onClose }: Pr
                             <input required type="number" name="power" value={localCar.power} onChange={handleInputChange} />
                         </div>
                         <div className="form-group">
-                            <label>Image Name</label>
-                            <input type="text" name="image" value={localCar.image} onChange={handleInputChange} placeholder="e.g. car1.jpg" />
+                            <label>Imagine Masina</label>
+                            <div className="simple-upload-container">
+                                <input 
+                                    type="file" 
+                                    accept="image/*" 
+                                    onChange={handleFileChange} 
+                                    className="simple-upload-input"
+                                    id="car-image-upload"
+                                />
+                                <label
+                                    htmlFor="car-image-upload" 
+                                    className="button simple-upload-btn"
+                                >
+                                    {isUploading ? 'Se încarcă...' : 'Alege imagine'}
+                                </label>
+                                
+                                {localCar.image && (
+                                    <div className="simple-upload-info">
+                                        <span className="simple-upload-filename" title={localCar.image}>
+                                            {localCar.image}
+                                        </span>
+                                        <button 
+                                            type="button" 
+                                            onClick={handleRemoveImage}
+                                            className="simple-upload-delete"
+                                        >
+                                            Șterge
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                            {uploadError && (
+                                <div className="simple-upload-error">
+                                    {uploadError}
+                                </div>
+                            )}
                         </div>
                         <div className="form-group full-width">
                             <label>Equipment (comma separated)</label>

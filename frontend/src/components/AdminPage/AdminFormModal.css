@@ -80,3 +80,73 @@
 .button-save:hover {
     background: var(--primary-700);
 }
+
+/* Simple Image Upload CSS */
+.simple-upload-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.simple-upload-input {
+    display: none;
+}
+
+.simple-upload-btn {
+    color: #ffffff !important;
+    cursor: pointer;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    background: var(--primary-600);
+    border-radius: 8px;
+    display: inline-block;
+    box-shadow: none;
+    margin: 0;
+    text-align: center;
+}
+
+.simple-upload-btn:hover {
+    background: var(--primary-700);
+    color: #ffffff !important;
+}
+
+.simple-upload-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.simple-upload-filename {
+    font-size: 0.85rem;
+    color: var(--gray-600);
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.simple-upload-delete {
+    background: none;
+    border: none;
+    color: var(--danger-500);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.2rem;
+    transition: color 0.2s;
+}
+
+.simple-upload-delete:hover {
+    color: #b91c1c;
+    text-decoration: underline;
+}
+
+.simple-upload-error {
+    color: var(--danger-500);
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+}
+
+
+
